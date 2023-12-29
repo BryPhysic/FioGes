@@ -33,6 +33,7 @@ def main():
 def main_page(patient_data):
     
     st.markdown("# Patient Data ")
+    code = st.text_input("Code", key="code")
     name = st.text_input("Names", key="names")
     last_names = st.text_input("Last name", key="last_names")
     st.write("Gender:")
@@ -44,7 +45,9 @@ def main_page(patient_data):
     city = st.text_input("City", key="city")
 
     # Display the patient data dynamically as it is entered
+    
     st.write("### Patient Information Preview:")
+    st.write(f"**Code:** {code}")
     st.write(f"**Name:** {name}")
     st.write(f"**Last Name:** {last_names}")
     st.write(f"**Gender:** {selected_gender}")
@@ -54,9 +57,10 @@ def main_page(patient_data):
 
     # Button to save the data
     if st.button("Save Patient Data"):
-        patient_data = save_patient_data(name, last_names, selected_gender, age, dni, city)
+        patient_data = save_patient_data(code,name, last_names, selected_gender, age, dni, city)
         # Display the saved patient data in the sidebar
         st.sidebar.markdown("## Saved Patient Data 🎉")
+        st.sidebar.write(f"**Code:**      {patient_data['code']}")
         st.sidebar.write(f"**Name:**      {patient_data['name']}")
         st.sidebar.write(f"**Last Name:** {patient_data['last_names']}")
         st.sidebar.write(f"**Gender:**    {patient_data['gender']}")
@@ -65,9 +69,10 @@ def main_page(patient_data):
         st.sidebar.write(f"**City:**      {patient_data['city']}")
     return patient_data
 
-def save_patient_data(name, last_names, gender, age, dni, city):
+def save_patient_data(code,name, last_names, gender, age, dni, city):
    
     return {
+        'code': code,
         'name': name,
         'last_names': last_names,
         'gender': gender,
