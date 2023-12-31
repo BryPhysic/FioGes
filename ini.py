@@ -33,16 +33,40 @@ def main():
 def main_page(patient_data):
     
     st.markdown("# Patient Data ")
-    code = st.text_input("Code", key="code")
-    name = st.text_input("Names", key="names")
-    last_names = st.text_input("Last name", key="last_names")
-    st.write("Gender:")
-    gender_options = ['Male', 'Female']
     
-    selected_gender = st.radio('Select Gender', gender_options)
-    age = st.slider("Age", key="age")
-    dni = st.text_input("DNI", key="dni")
-    city = st.text_input("City", key="city")
+    col1, col2 = st.columns(2)
+    gender_options = ['Male', 'Female'] 
+   
+    
+    with col1:
+        name = st.text_input("Name", key="name")
+        age = st.slider("Age", key="age")
+        city = st.text_input("City", key="city")
+        sample = st.text_input("N Sample", key="sample")
+        entity =st.text_input("Entity", key="enti") 
+
+    with col2:
+        last_names = st.text_input("Last name", key="last_names")
+        selected_gender = st.radio('Select Gender', gender_options)
+        dni = st.text_input("DNI", key="dni")
+        code = st.text_input("History", key="code")
+        doc = st.text_input('Doctor:', key='doc')
+    
+    prode = st.text_input('Prodence:', key='Pro')
+    #email = 
+   
+    
+    col3, col4 = st.columns(2)
+    
+    with col3:
+        date_get = st.date_input("Date get", key="date_get")
+        
+
+    with col4:
+        date_out = st.date_input("Date out", key="date_out")
+        
+        
+    print(date_get)
 
     # Display the patient data dynamically as it is entered
     

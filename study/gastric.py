@@ -11,6 +11,7 @@ def app(patient_data):
         st.title("Gastric Protocol")
         st.markdown("## Patient Information")
         st.write(f"Code: {patient_data['code']}")
+        
         col1, col2 = st.columns(2)
         
         with col1:
