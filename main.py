@@ -1,131 +1,97 @@
-
 import streamlit as st
-import pandas as pd
-import numpy as np
+from study import gastric, page3
 
+class EstadoSesion:
+    def __init__(self, **kwargs):
+        for clave, valor in kwargs.items():
+            setattr(self, clave, valor)
 
+def principal():
+    # Inicializa patient_data en st.session_state si aún no existe
+    if 'patient_data' not in st.session_state:
+        st.session_state.patient_data = None
 
+    st.sidebar.title("Protocolo")
+    seleccion = st.sidebar.selectbox(
+        'Por favor, seleccione un protocolo a continuación:',
+        ['Datos del Paciente', 'Gástrico', 'Cáncer de Mama', 'Cáncer de Pulmón']
+    )
 
+    if seleccion == "Datos del Paciente":
+        st.session_state.patient_data = pagina_principal(st.session_state.patient_data)
+    elif seleccion == "Gástrico":
+        if st.session_state.patient_data is not None:
+            gastric.app(st.session_state.patient_data)
+        else:
+            st.warning("Por favor, ingrese primero los datos del paciente.")
+    elif seleccion == "Cáncer de Mama":
+        page3.app()
 
+def pagina_principal(patient_data):
+    st.markdown("# Datos del Paciente")
+    col1, col2 = st.columns(2)
+    opciones_genero = ['Masculino', 'Femenino']
 
-st.write("Here's our first attempt at using data to create a table:")
-st.write(pd.DataFrame({
-    'first column': [1, 2, 3, 4],
-    'second column': [10, 20, 30, 40]
-}))
+    with col1:
+        nombre = st.text_input("Nombre", key="name")
+        edad = st.slider("Edad", key="age")
+        ciudad = st.text_input("Ciudad", key="city")
+        muestra = st.text_input("N Muestra", key="sample")
+        entidad = st.text_input("Entidad", key="enti")
 
-st.write("Here's our first a")
+    with col2:
+        apellidos = st.text_input("Apellidos", key="last_names")
+        genero_seleccionado = st.radio('Seleccionar Género', opciones_genero)
+        dni = st.text_input("DNI", key="dni")
+        codigo = st.text_input("Historia", key="code")
+        doctor = st.text_input('Doctor:', key='doc')
 
-
-dataframe = pd.DataFrame(
-    np.random.randn(10, 20),
-    columns=('col %d' % i for i in range(20)))
-
-st.dataframe(dataframe.style.highlight_max(axis=0))
-
-
-chart_data = pd.DataFrame(
-     np.random.randn(20, 3),
-     columns=['a', 'b', 'c'])
-
-st.line_chart(chart_data)
-
-
-map_data = pd.DataFrame(
-    np.random.randn(1000, 2) / [50, 50] + [37.76, -122.4],
-    columns=['lat', 'lon'])
-
-st.map(map_data)
-
-df = pd.DataFrame({
-    "col1": np.random.randn(1000) / 50 + 37.76,
-    "col2": np.random.randn(1000) / 50 + -122.4,
-    "col3": np.random.randn(1000) * 100,
-    "col4": np.random.rand(1000, 4).tolist(),
-})
-
-st.map(df,
-    latitude='col1',
-    longitude='col2',
-    size='col3',
-    color='col4')
-
-
-
-
-x = st.slider('x')  # 👈 this is a widget
-st.write(x, 'squared is', x * x)
-
-
-import streamlit as st
-st.text_input("Your name", key="name")
-# You can access the value at any point with:
-st.session_state.name
-
-
-
-if st.checkbox('Show dataframe'):
-    chart_data = pd.DataFrame(
-       np.random.randn(20, 3),
-       columns=['a', 'b', 'c'])
-
-    chart_data
+    procedencia = st.text_input('Procedencia:', key='Pro')
     
+    col3, col4 = st.columns(2)
     
+    with col3:
+        fecha_obtencion = st.date_input("Fecha de Obtención", key="date_get")
 
-df = pd.DataFrame({
-    'first column': [1, 2, 3, 4],
-    'second column': [10, 20, 30, 40]
-    })
+    with col4:
+        fecha_salida = st.date_input("Fecha de Salida", key="date_out")
 
-option = st.selectbox(
-    'Which number do you like best?',
-     df['first column'])
+    st.write("### Vista Previa de la Información del Paciente:")
+    st.write(f"**Código:** {codigo}")
+    st.write(f"**Nombre:** {nombre}")
+    st.write(f"**Apellidos:** {apellidos}")
+    st.write(f"**Género:** {genero_seleccionado}")
+    st.write(f"**Edad:** {edad}")
+    st.write(f"**DNI:** {dni}")
+    st.write(f"**Ciudad:** {ciudad}")
 
-'You selected: ', option
+    # Botón para guardar los datos
+    if st.button("Guardar Datos del Paciente"):
+        patient_data = {
+            'muestra': muestra,
+            'entidad': entidad,
+            'codigo': codigo,
+            'nombre': nombre,
+            'apellidos': apellidos,
+            'genero': genero_seleccionado,
+            'edad': edad,
+            'dni': dni,
+            'ciudad': ciudad,
+            'Doctor': doctor,
+            'Procedencia': procedencia,
+            'fecha_obtencion': fecha_obtencion,
+            'fecha_salida': fecha_salida
+        }
+        st.sidebar.markdown("## Datos del Paciente Guardados 🎉")
+        st.sidebar.write(f"**Código:**      {patient_data['codigo']}")
+        st.sidebar.write(f"**Nombre:**      {patient_data['nombre']}")
+        st.sidebar.write(f"**Apellidos:** {patient_data['apellidos']}")
+        st.sidebar.write(f"**Género:**    {patient_data['genero']}")
+        st.sidebar.write(f"**Edad:**.      {patient_data['edad']}")
+        st.sidebar.write(f"**DNI:**       {patient_data['dni']}")
+        st.sidebar.write(f"**Ciudad:**      {patient_data['ciudad']}")
+        print(patient_data)
+    return patient_data
 
-
-
-# Add a selectbox to the sidebar:
-add_selectbox = st.sidebar.selectbox(
-    'How would you like to be contacted?',
-    ('Email', 'Home phone', 'Mobile phone')
-)
-
-# Add a slider to the sidebar:
-add_slider = st.sidebar.slider(
-    'Select a range of values',
-    0.0, 100.0, (25.0, 75.0)
-)
-
-
-
-left_column, right_column = st.columns(2)
-# You can use a column just like st.sidebar:
-left_column.button('Press me!')
-
-# Or even better, call Streamlit functions inside a "with" block:
-with right_column:
-    chosen = st.radio(
-        'Sorting hat',
-        ("Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"))
-    st.write(f"You are in {chosen} house!")
-    
-    
-    
-    
-import time
-
-'Starting a long computation...'
-
-# Add a placeholder
-latest_iteration = st.empty()
-bar = st.progress(0)
-
-for i in range(100):
-  # Update the progress bar with each iteration.
-  latest_iteration.text(f'Iteration {i+1}')
-  bar.progress(i + 1)
-  time.sleep(0.1)
-
-'...and now we\'re done!'
+if __name__ == "__main__":
+    principal()

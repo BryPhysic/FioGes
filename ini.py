@@ -1,5 +1,5 @@
 import streamlit as st
-from study import gastric, page3
+from study import gastric__, page3
 
 class SessionState:
     def __init__(self, **kwargs):
@@ -23,7 +23,7 @@ def main():
         #main_page()
     elif selection == "Gastric":
         if st.session_state.patient_data is not None:
-            gastric.app(st.session_state.patient_data)
+            gastric__.app(st.session_state.patient_data)
         else:
             st.warning("Please enter patient data first.")
     elif selection == "Breast Cancer":
@@ -33,11 +33,10 @@ def main():
 def main_page(patient_data):
     
     st.markdown("# Patient Data ")
-    
     col1, col2 = st.columns(2)
     gender_options = ['Male', 'Female'] 
    
-    
+
     with col1:
         name = st.text_input("Name", key="name")
         age = st.slider("Age", key="age")
@@ -65,8 +64,8 @@ def main_page(patient_data):
     with col4:
         date_out = st.date_input("Date out", key="date_out")
         
-        
-    print(date_get)
+   
+    #print(date_get)
 
     # Display the patient data dynamically as it is entered
     
@@ -81,7 +80,25 @@ def main_page(patient_data):
 
     # Button to save the data
     if st.button("Save Patient Data"):
-        patient_data = save_patient_data(code,name, last_names, selected_gender, age, dni, city)
+        patient_data = {
+        #sample = st.text_input("N Sample", key="sample")
+        #entity =st.text_input("Entity", key="enti")
+        'sample':sample,
+        'entity':entity,
+        'code': code,
+        'name': name,
+        'last_names': last_names,
+        'gender': selected_gender,
+        'age': age,
+        'dni': dni,
+        'city': city,
+        'Doctor':doc,
+        'Procedence':prode,
+        'date_get': date_get,
+        'dare_out':date_out
+        
+        
+    }
         # Display the saved patient data in the sidebar
         st.sidebar.markdown("## Saved Patient Data 🎉")
         st.sidebar.write(f"**Code:**      {patient_data['code']}")
@@ -91,19 +108,10 @@ def main_page(patient_data):
         st.sidebar.write(f"**Age:**.      {patient_data['age']}")
         st.sidebar.write(f"**DNI:**       {patient_data['dni']}")
         st.sidebar.write(f"**City:**      {patient_data['city']}")
+        print(patient_data)
     return patient_data
 
-def save_patient_data(code,name, last_names, gender, age, dni, city):
-   
-    return {
-        'code': code,
-        'name': name,
-        'last_names': last_names,
-        'gender': gender,
-        'age': age,
-        'dni': dni,
-        'city': city,
-    }
+
 
 if __name__ == "__main__":
     main()
