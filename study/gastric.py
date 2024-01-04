@@ -161,8 +161,7 @@ def app(patient_data):
             st.write("Reporte generado y guardado con éxito.")
             return ruta
             
-            #st.image(results, caption='Uploaded Image.', use_column_width=True)
-    
+        
         # Botón para generar y guardar el reporte
         st.title("Generador de Reportes")
         if st.button("Guardar y Generar Reporte"):
