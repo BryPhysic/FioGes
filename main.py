@@ -34,7 +34,7 @@ def pagina_principal(patient_data):
 
     with col1:
         nombre = st.text_input("Nombre", key="name")
-        edad = st.slider("Edad", key="age")
+        edad = st.text_input("Edad", key="age")
         ciudad = st.text_input("Ciudad", key="city")
         muestra = st.text_input("N Muestra", key="sample")
         entidad = st.text_input("Entidad", key="enti")

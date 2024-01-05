@@ -63,7 +63,7 @@ def app(patient_data):
             "LOCALIZACIÓN": ["ANTRO", "CUERPO", "ANTROCORPORAL"],
             "INFLAMACIÓN CRÓNICA": ["AUSENTE", "LEVE", "MODERADA", "SEVERA"],
             "ACTIVIDAD": ["AUSENTE", "LEVE", "MODERADA", "SEVERA"],
-            "DISPLASIA": ["AUSENTE", "GRADO BAJO", "GRADO ALTO"],
+            "DISPLASIA": ["AUSENTE", "BAJO GRADO", "ALTO GRADO"],
             "METAPLASIA INTESTINAL": ["AUSENTE", "METAPLASIA INTESTINAL COMPLETA", "METAPLASIA INTESTINAL INCOMPLETA", "METAPLASIA INTESTINAL COMPLETA E INCOMPLETA"],
             "ATROFIA": ["AUSENTE", "ATROFIA LEVE", "ATROFIA MODERADA", "ATROFIA SEVERA"],
             "HELICOBACTER PYLORI": ["AUSENTE", "PRESENTE (+/+++)","PRESENTE (++/+++)", "PRESENTE (+++/+++)"],
@@ -134,7 +134,7 @@ def app(patient_data):
                 st.image(image, caption='Imagen', use_column_width=True)
             with col2:
         
-                st.image(results, caption='Imagen analisada', use_column_width=True)
+                st.image(results, caption='Imagen analizada', use_column_width=True)
     
             
         def generar_y_guardar_reporte():
