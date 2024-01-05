@@ -8,8 +8,6 @@ new_image = 'Testimages/Metaplasia_300.png'
 
 pil = Image.open(new_image).convert('RGB')
 
-
-
 from PIL import Image
 import numpy as np
 import matplotlib.pyplot as plt
