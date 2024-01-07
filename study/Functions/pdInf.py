@@ -131,12 +131,13 @@ def create_pdf(code, name, last_names, selected_gender, age, dni,muestra,entidad
     pdf.multi_cell(0, 8, txt=f"{str(conclusion)}", border=0,ln=1)
     #pdf.multi_cell(0, 8, txt="IMAGENES", border=0,ln=1)
     #----pagina 3
-    pdf.add_page()
-    pdf.patient(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1, city)
-    pdf.add_space(8)
-    pdf.set_xy(20,120)
-    pdf.multi_cell(0, 8, txt="ANALISIS DE IMAGENES", border=0,ln=1)
-    if ImageI is not None:   
+    
+    if ImageI is not None: 
+        pdf.add_page()
+        pdf.patient(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1, city)
+        pdf.add_space(8)
+        pdf.set_xy(20,120)
+        pdf.multi_cell(0, 8, txt="ANALISIS DE IMAGENES", border=0,ln=1)  
         pdf.add_image(ImageI, x=20, y=130, w=80, h=80)
     if ImageO is not None:   
         pdf.add_image(ImageO, x=110, y=130, w=80, h=80)
@@ -144,7 +145,9 @@ def create_pdf(code, name, last_names, selected_gender, age, dni,muestra,entidad
     ruta = f"temp/report_{name+' '+last_names}_{code}.pdf"
     pdf.output(ruta)
     return ruta
-   
+
+
+"""
 #-------
 patient_data = {
             'muestra': 'muestra',
@@ -203,5 +206,5 @@ create_pdf(code=patient_data['codigo'],
                 
            ) 
 
-
-
+###
+"""

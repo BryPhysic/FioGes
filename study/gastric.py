@@ -127,7 +127,8 @@ def app(patient_data):
         st.markdown("## Subir imagen")
         uploaded_file = st.file_uploader("Suba la imagen correspondiente", type=['png', 'jpg', 'jpeg'])
         #print(uploaded_file)
-        
+        image = None
+        results = None
         if uploaded_file is not None:
             umbral = st.slider('Umbral de confianza', 0.0, 1.0, 0.5)
             #image = Image.open(uploaded_file)
