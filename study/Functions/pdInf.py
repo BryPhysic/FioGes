@@ -3,18 +3,16 @@ from fpdf import FPDF
 class PDF(FPDF):
     def header(self):
         self.image("imgs/Inf Pat (1).png", 0, 0, 210, 297)
-
-    
-    
+  
     def add_image(self, image_path, x, y, w=0, h=0):
         self.image(image_path, x, y, w, h)
         
-    def patient(self,code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1,fecha2, city,border=None):
+    def patient(self,code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1, city,border=None):
         x,y = 20,70
         self.set_xy(x, y)
         if border is None:
             bord = 0
-        self.set_font("Arial", size=18)
+        self.set_font("Arial", size=15)
         self.cell(90, 8, txt=f"DATOS GENERALES", border=bord,ln=1)
         self.set_x(x)
         # Añadir celdas para los datos del paciente
@@ -35,24 +33,25 @@ class PDF(FPDF):
         self.cell(90, 5, txt=f"Entidad:   {entidad}", border=bord, ln=1)
         self.set_x(x)
         self.cell(90, 5, txt=f"Fecha de Entrada: {fecha1}", border=bord)
-        self.cell(90, 5, txt=f"Fecha de Salida: {fecha2}", border=bord, ln=1)
-        self.set_x(x)
         self.cell(90, 5, txt=f"Procedencia: {procedencia}", border=bord)
+        #self.cell(90, 5, txt=f"Fecha de Salida: {fecha2}", border=bord, ln=1)
+        #self.set_x(x)
+        #self.cell(90, 5, txt=f"Procedencia: {procedencia}", border=bord)
         
-    def variables_macro(self, data_dict,border=None):
+    def variables_rep(self, data_dict,border=None):
         if border is None:
             bord = 0
         x,y = 20,100
         #self.set_xy(x,y)
         self.set_x(x)
-        self.set_font("Arial", size=20)
-        self.cell(90, 8, txt=f"DIAGNOSTICO MACROSCOPICO", border=0,ln=1)
+        self.set_font("Arial", size=15)
+        self.cell(90, 8, txt=f"RECEPCIÓN", border=0,ln=1)
         self.set_font("Arial", size=12)
         
         for key, value in data_dict.items():
             self.set_x(x)
-            self.cell(90, 8, txt=f"{key}: ", border=bord)
-            self.cell(90, 8, txt=f"{value}", border=bord, ln=1)
+            self.cell(90, 5, txt=f"{key}: ", border=bord)
+            self.cell(90, 5, txt=f"{value}", border=bord, ln=1)
 
     def variables_micro(self,data_dict,bord=None,x=None,y=None):
         if bord is None:
@@ -64,13 +63,13 @@ class PDF(FPDF):
             y = 150
         self.set_x(x)
         
-        self.set_font("Arial", size=20)
-        self.cell(90, 8, txt=f"DIAGNOSTICO MICROSCOPICO", border=0,ln=1)
+        self.set_font("Arial", size=15)
+        self.cell(90, 8, txt=f"ESTUDIO MICROSCOPICO", border=0,ln=1)
         for key, value in data_dict.items():
             self.set_x(x)
             self.set_font("Arial", size=12)
-            self.cell(60, 6, txt=f"{key}: ", border=bord)
-            self.cell(90, 6, txt=f"{value}", border=bord, ln=1)  # Celda vacía para alineación
+            self.cell(60, 5, txt=f"{key}: ", border=bord)
+            self.cell(90, 5, txt=f"{value}", border=bord, ln=1)  # Celda vacía para alineación
     
     def add_space(self, height=None):
         if height is None:
@@ -96,31 +95,44 @@ variables_dict = {
 }
 
 # Crear una instancia de la clase PDF
-def create_pdf(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1,fecha2, city,variables_macro,variables_micro,conclusion,ImageI=None,ImageO=None): 
+def create_pdf(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1, city,recep,variables_micro,est_macro,conclusion,ImageI=None,ImageO=None): 
     pdf = PDF()
     pdf.set_auto_page_break(auto=True, margin=15)
+    #----pagina 1
     pdf.add_page()
    
     #pdf.patient_data(code,name, last_names, selected_gender, age, dni, city)
-    pdf.patient(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1,fecha2, city)
-    pdf.add_space(10)
-    pdf.variables_macro(variables_macro)
+    pdf.patient(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1, city)
+    pdf.add_space(15)
+    pdf.variables_rep(recep)
     
+    pdf.add_space(15)
+    pdf.set_x(20)
+    pdf.set_font_size(15)
+    pdf.cell(90, 8, txt="ESTUDIO MACRO", border=0,ln=1)
+    
+    pdf.set_x(20)
+    pdf.set_font_size(12)
+    pdf.multi_cell(0, 8, txt=f"{str(est_macro)}", border=0,ln=1)
+    
+    #----pagina 2
     pdf.add_page()
-    pdf.patient(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1,fecha2, city)
-    pdf.add_space(10)
+    pdf.patient(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1, city)
+    
+    pdf.add_space(15)
     pdf.variables_micro(variables_micro,x=20,bord=0)
     
     pdf.add_space(8)
     pdf.set_x(20)
-    pdf.set_font_size(20)
-    pdf.cell(90, 8, txt="CONCLUSION", border=0,ln=1)
+    pdf.set_font_size(15)
+    pdf.cell(90, 8, txt="CONCLUSIÓN", border=0,ln=1)
     pdf.set_x(20)
     pdf.set_font_size(12)
-    pdf.multi_cell(0, 8, txt=f"{str(conclusion)}", border=1,ln=1)
+    pdf.multi_cell(0, 8, txt=f"{str(conclusion)}", border=0,ln=1)
     #pdf.multi_cell(0, 8, txt="IMAGENES", border=0,ln=1)
+    #----pagina 3
     pdf.add_page()
-    pdf.patient(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1,fecha2, city)
+    pdf.patient(code, name, last_names, selected_gender, age, dni,muestra,entidad,doctor,procedencia,fecha1, city)
     pdf.add_space(8)
     pdf.set_xy(20,120)
     pdf.multi_cell(0, 8, txt="ANALISIS DE IMAGENES", border=0,ln=1)
@@ -133,6 +145,7 @@ def create_pdf(code, name, last_names, selected_gender, age, dni,muestra,entidad
     pdf.output(ruta)
     return ruta
    
+#-------
 patient_data = {
             'muestra': 'muestra',
             'entidad': 'entidad',
@@ -148,15 +161,14 @@ patient_data = {
             'fecha_obtencion': 'fecha_obtencion',
             'fecha_salida': 'fecha_salid'
         }
-variables_dict = {
-    'LOCATION': 'location',
-    'CHRONIC INFLAMMATION': 'chronic_inflammation',
-    'ACTIVITY': 'activity',
-    'DYSPLASIA': 'dysplasia',
-    'INTESTINAL METAPLASIA': 'intestinal_metaplasia',
-    'ATROPHY': 'atrophy'
+recepcion = {
+    'organo': 'organo',
+    'muestra': 'muestra',
+    'observaciones': 'observaciones',
+    'calidad': 'calidad',
 }
-variables_dicto = {
+
+variables_dict = {
     'Test': 'location',
     'CHRONIC INFLAMMATION': 'chronic_inflammation',
     'ACTIVITY': 'activity',
@@ -180,11 +192,12 @@ create_pdf(code=patient_data['codigo'],
                 doctor=patient_data['Doctor'],
                 procedencia=patient_data['Procedencia'],
                 fecha1=patient_data['fecha_obtencion'],
-                fecha2=patient_data['fecha_salida'],
+                #fecha2=patient_data['fecha_salida'],
                 city=patient_data['ciudad'],
-                variables_macro=variables_dict,
-                variables_micro=variables_dicto,
-                conclusion="Conclusion",
+                recep=recepcion,
+                est_macro="Esto es un estudio macroscopico ksjasdlakaldakljlsalasad",
+                variables_micro=variables_dict,
+                conclusion="Conclukajsdkaskjdlasdlkjhsdaksjdajlkdjaslkdjlkasion",
                 ImageI=pil,
                 ImageO=pil
                 

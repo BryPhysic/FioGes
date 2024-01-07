@@ -1,16 +1,15 @@
 from ultralytics import YOLO
 from PIL import Image
 import numpy as np
+#import matplotlib.pyplot as plt
 
-import matplotlib.pyplot as plt
+
+
 moldel4 = YOLO('study/Models/Best Model definitivo.pt')
-new_image = 'Testimages/Metaplasia_300.png'
+#new_image = 'Testimages/Metaplasia_300.png'
+#pil = Image.open(new_image).convert('RGB')
 
-pil = Image.open(new_image).convert('RGB')
 
-from PIL import Image
-import numpy as np
-import matplotlib.pyplot as plt
 
 def predict(image, conf=None):
     # Establecer un valor predeterminado para 'conf' si no se proporciona
