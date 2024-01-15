@@ -7,7 +7,7 @@ from PIL import Image
 sys.path.append('study')
 from .Functions.pdInf import create_pdf
 from .Functions.inference import predict
-
+##jsdjasdja
 # En el archivo gastric.py
 import streamlit as st
 import study.Functions.pdInf as pdf
